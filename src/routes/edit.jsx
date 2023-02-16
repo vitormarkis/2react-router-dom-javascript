@@ -1,9 +1,21 @@
-import { Form, useLoaderData } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Form, useLoaderData, redirect, useNavigate } from 'react-router-dom';
+import { updateContact } from '../contacts';
+
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+  // console.log({updates, formData: [...formData]})
+  await updateContact(params.contactID, updates);
+  return redirect(`/contacts/${params.contactID}`);
+}
 
 export default function EditContact() {
+  const navigate = useNavigate()
   const contact = useLoaderData();
 
   return (
+
     <Form method="post" id="contact-form">
       <p>
         <span>Name</span>
@@ -47,7 +59,9 @@ export default function EditContact() {
       </label>
       <p>
         <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+        <button 
+        onClick={() => navigate(-1)}
+        type="button">Cancel</button>
       </p>
     </Form>
   );

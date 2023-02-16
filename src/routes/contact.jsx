@@ -3,7 +3,7 @@ import { getContact } from '../contacts';
 
 export async function loader({ params }) {
   return getContact(params.contactID);
-}
+} 
 
 export default function Contact() {
   const contact = useLoaderData();

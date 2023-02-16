@@ -40,14 +40,13 @@ export async function updateContact(id, updates) {
 }
 
 export async function deleteContact(id) {
-  let contacts = await localforage.getItem('contacts');
-  let index = contacts.findIndex(contact => contact.id === id);
-  if (index > -1) {
-    contacts.splice(index, 1);
-    await set(contacts);
-    return true;
-  }
-  return false;
+  const contacts = await localforage.getItem('contacts');
+  const filtered_contacts = contacts.filter(contact => contact.id !== id);
+  
+  if (filtered_contacts.length === contacts.length) return false;
+  
+  await set(filtered_contacts);
+  return true;
 }
 
 function set(contacts) {
